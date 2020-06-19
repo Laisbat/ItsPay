@@ -1,0 +1,35 @@
+app:
+  email-contato: lais.batista.pereira@gmail.com
+  seguranca:
+    enable-https: false
+  swagger:
+    project-groupId: br.com.avaliacaolais
+    project-version: 0.0.1-SNAPSHOT
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  application:
+    name: itspay
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    generate-ddl: false
+    show-sql: false
