@@ -4,6 +4,8 @@ import br.com.avaliacaolais.itspay.dto.ClienteDTO;
 import br.com.avaliacaolais.itspay.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +23,9 @@ public class ClienteController {
 
     @PostMapping("/cadastrar")
     @ApiOperation("Método para cadastrar cliente")
-    public void cadastraCliente(ClienteDTO clienteDTO){
-        clienteService.cadastrar(clienteDTO);
+    public ResponseEntity cadastraCliente(ClienteDTO clienteDTO){
 
 
+        return clienteService.cadastrar(clienteDTO);
     }
-
-
 }
