@@ -27,7 +27,4 @@ public class ClienteEntity implements Serializable {
     @Column(name = "TX_CPF", nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(name = "TX_CNPJ", unique = true, length = 14)
-    private String cnpj;
-
 }

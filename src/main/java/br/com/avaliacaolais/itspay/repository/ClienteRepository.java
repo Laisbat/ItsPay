@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
 
     @Query(value="SELECT cliente FROM ClienteEntity cliente WHERE cliente.cpf =:cpf")
-    Optional<ClienteEntity> findByCPF(@Param("cpf") String cpf);
+    ClienteEntity findByCPF(@Param("cpf") String cpf);
 }

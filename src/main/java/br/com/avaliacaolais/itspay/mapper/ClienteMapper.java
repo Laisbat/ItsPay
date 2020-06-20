@@ -9,5 +9,4 @@ import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 public interface ClienteMapper extends BaseMapper<ClienteEntity, ClienteDTO> {
-
 }

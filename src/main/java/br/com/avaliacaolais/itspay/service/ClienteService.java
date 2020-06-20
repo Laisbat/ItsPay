@@ -2,7 +2,6 @@ package br.com.avaliacaolais.itspay.service;
 
 
 import br.com.avaliacaolais.itspay.dto.ClienteDTO;
-import br.com.avaliacaolais.itspay.dto.ErroDTO;
 import br.com.avaliacaolais.itspay.mapper.ClienteMapper;
 import br.com.avaliacaolais.itspay.repository.ClienteRepository;
 import br.com.avaliacaolais.itspay.service.base.AbstractServiceBase;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import util.ValidatorUtil;
 
 @Slf4j
 @Service
@@ -27,47 +27,41 @@ public class ClienteService extends AbstractServiceBase {
         this.clienteMapper = clienteMapper;
     }
 
+    public ClienteDTO buscarPorCpf(String cpf){
+        return clienteMapper.toDto(clienteRepository.findByCPF(cpf));
+    }
+
     public ResponseEntity cadastrar(ClienteDTO clienteDTO) {
-
-        if (!validarCampoVazio(clienteDTO.getNome()) || !validarCampoVazio(clienteDTO.getCpf())){
-            if (clienteDTO.getNome() != null) {
-                return mensagemErro("Campo Obrigatório:" + "cpf");
-            }
-            return mensagemErro("Campo Obrigatório:" + "nome");
+        if(tratarCampos(clienteDTO) != null){
+            return tratarCampos(clienteDTO);
         }
 
-        if (!validarTamanhoCampo(clienteDTO.getCpf(), 11) || !validarTamanhoCampo(clienteDTO.getCnpj(), 14) && clienteDTO.getCnpj() != null) {
-            if (!validarTamanhoCampo(clienteDTO.getCpf(), 11)) {
-                return mensagemErro("CPF deve conter 11 dígitos: " + clienteDTO.getCpf());
-            }
-            return mensagemErro("CPNJ deve conter 14 dígitos: " + clienteDTO.getCnpj());
+        if (clienteRepository.findByCPF(clienteDTO.getCpf()) != null) {
+            return new ResponseEntity("Cliente já existe.", HttpStatus.CONFLICT);
         }
 
-        if (clienteRepository.findByCPF(clienteDTO.getCpf()).isPresent()) {
-            return new ResponseEntity(null, HttpStatus.CONFLICT);
-        }
         return new ResponseEntity(clienteRepository.save((clienteMapper.toEntity(clienteDTO))), HttpStatus.CREATED);
-
     }
 
-    private ErroDTO popularErro(String mensagem) {
-        ErroDTO erroDTO = new ErroDTO();
-        erroDTO.setMensagemErro(mensagem);
-        return erroDTO;
-    }
-
-    private boolean validarTamanhoCampo(String valor, Integer numero) {
-        if (valor.length() != numero) {
-            return false;
+    private ResponseEntity tratarCampos(ClienteDTO clienteDTO) {
+        if (validarCampoVazio(clienteDTO.getNome()) && validarCampoVazio(clienteDTO.getCpf())) {
+            return mensagemErro("Os campos cpf e nome são obrigatórios");
+        } else if (validarCampoVazio(clienteDTO.getCpf())) {
+            return mensagemErro("Campo Obrigatório: " + "cpf");
+        } else if (validarCampoVazio(clienteDTO.getNome())) {
+            return mensagemErro("Campo Obrigatório: " + "nome");
+        } else if (!ValidatorUtil.verificarCpf(clienteDTO.getCpf())) {
+            return mensagemErro("CPF inválido: " + clienteDTO.getCpf());
+        }else{
+            return null;
         }
-        return true;
     }
 
     private boolean validarCampoVazio(String valor) {
         if (valor == null) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private ResponseEntity mensagemErro(String mensagem) {
