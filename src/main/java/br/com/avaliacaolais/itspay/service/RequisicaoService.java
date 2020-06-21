@@ -34,4 +34,8 @@ public class RequisicaoService {
 
         return requisicaoRepository.save(requisicaoEntity);
     }
+
+    public Integer recuperarQuantidade(String cpf){
+        return requisicaoRepository.recuperarQuantidade(cpf);
+    }
 }

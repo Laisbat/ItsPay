@@ -17,7 +17,7 @@ public class ValidationController {
     @Autowired
     RequisicaoService requisicaoService;
 
-    @GetMapping("/{cpf}/{cpfUsuarioLogado}")
+    @GetMapping("/cpf/{cpf}/{cpfUsuarioLogado}")
     @ApiOperation("Valida CPF")
     public ResponseEntity<String> validaCPF(@PathVariable final String cpfUsuarioLogado, @PathVariable final String cpf) {
         requisicaoService.salvarRequisicao(cpfUsuarioLogado);
@@ -29,7 +29,7 @@ public class ValidationController {
         return new ResponseEntity<>("Cpf válido", HttpStatus.OK);
     }
 
-    @GetMapping("/{cnpj}/{cpfUsuarioLogado}")
+    @GetMapping("/cnpj/{cnpj}/{cpfUsuarioLogado}")
     @ApiOperation("Valida CNPJ")
     public ResponseEntity<String> validaCNPJ(@PathVariable final String cpfUsuarioLogado, @PathVariable final String cnpj) {
         requisicaoService.salvarRequisicao(cpfUsuarioLogado);
