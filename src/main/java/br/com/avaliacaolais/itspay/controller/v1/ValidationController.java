@@ -20,7 +20,10 @@ public class ValidationController {
     @GetMapping("/cpf/{cpf}/{cpfUsuarioLogado}")
     @ApiOperation("Valida CPF")
     public ResponseEntity<String> validaCPF(@PathVariable final String cpfUsuarioLogado, @PathVariable final String cpf) {
-        requisicaoService.salvarRequisicao(cpfUsuarioLogado);
+
+        if(requisicaoService.salvar(cpfUsuarioLogado) == null){
+            return new ResponseEntity<>("Usuário não possui cadastro.", HttpStatus.OK);
+        }
 
         if(!ValidatorUtil.verificarCpf(cpf)){
             return new ResponseEntity<>("Cpf inválido", HttpStatus.OK);
@@ -32,7 +35,9 @@ public class ValidationController {
     @GetMapping("/cnpj/{cnpj}/{cpfUsuarioLogado}")
     @ApiOperation("Valida CNPJ")
     public ResponseEntity<String> validaCNPJ(@PathVariable final String cpfUsuarioLogado, @PathVariable final String cnpj) {
-        requisicaoService.salvarRequisicao(cpfUsuarioLogado);
+        if(requisicaoService.salvar(cpfUsuarioLogado) == null){
+            return new ResponseEntity<>("Usuário não possui cadastro.", HttpStatus.OK);
+        }
 
         if(!ValidatorUtil.verificarCNPJ(cnpj)){
             return new ResponseEntity<>("Cnpj inválido", HttpStatus.OK);
